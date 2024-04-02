@@ -25,12 +25,3 @@ Welcome to the Word Game repository! This is a command-line based word game wher
 To run the game, simply execute the main program file in your preferred C compiler. Make sure to have the dictionary file (`dictionary.txt`) in the same directory.
 
 Follow the on-screen prompts to play the game.
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute to this project, feel free to fork the repository, make your changes, and submit a pull request. Please ensure that any new features or changes are accompanied by appropriate documentation and tests.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
