@@ -81,6 +81,9 @@ int main(void)
     free(player1);
     free(player2);
 
+    int c;
+    while((c = getchar()) != '\n' && c != EOF);
+
     return 0;
 }
 
