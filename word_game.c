@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_WORD_LENGTH 100
+#define MAX_WORD_LENGTH 10
 
 int POINTS[] = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
 
@@ -13,14 +13,15 @@ int get_points(char *word);
 void print_results(char *player1, char *player2, int pts1, int pts2);
 int processDictionary(const char *filename, const char *word);
 char random_letters();
+int check_letters(char *player, char *letters);
 
 int main(void)
 {
     srand(time(NULL));
 
-    char letters[10];
+    char letters[MAX_WORD_LENGTH];
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < MAX_WORD_LENGTH; i++)
     {
         letters[i] = random_letters();
     }
@@ -28,7 +29,7 @@ int main(void)
     printf("Your letters are:\n");
     printf("%s\n\n", letters);
 
-    printf("WELCOME TO A SCRABBLE GAME - PLEASE FOLLOW THE INSTRUCTIONS TO PLAYER\n");
+    printf("WELCOME TO A SCRABBLE GAME - PLEASE FOLLOW THE INSTRUCTIONS TO PLAY\n");
 
     printf("\nNo PLURALS accepted...\n");
     printf("Player 1 enter word: ");
@@ -54,8 +55,26 @@ int main(void)
     int check1 = processDictionary("dictionary.txt", player1);
     int check2 = processDictionary("dictionary.txt", player2);
 
-    int pts1 = get_points(player1);
-    int pts2 = get_points(player2);
+    int pts1;
+    int pts2;
+
+    if (check_letters(player1, letters) && check1 == 1)
+    {
+        pts1 = get_points(player1);
+    }
+    else
+    {
+        pts1 = 0;
+    }
+
+    if (check_letters(player2, letters) && check2 == 1)
+    {
+        pts2 = get_points(player2);
+    }
+    else
+    {
+        pts2 = 0;
+    }
 
     print_results(player1, player2, pts1, pts2);
 
@@ -127,8 +146,8 @@ void print_results(char *player1, char *player2, int pts1, int pts2)
 
 int processDictionary(const char *filename, const char *word)
 {
-
-    char line[100]; // Assuming maximum line length is 100 characters
+    // Assuming maximum line length is 100 characters
+    char line[100];
 
     // Open the dictionary file
     FILE *file = fopen(filename, "r");
@@ -171,6 +190,31 @@ int processDictionary(const char *filename, const char *word)
 
 char random_letters()
 {
-    char x = (rand() % 26) + 65;
+    char x = (rand() % 26) + 'a';
     return x;
+}
+
+int check_letters(char *player, char *letters)
+{
+    int length_pl = strlen(player);
+    int length_lt = strlen(letters);
+
+    int occurances[26] = {0};
+
+    for (int i = 0; i < length_lt; i++)
+    {
+        occurances[letters[i] - 'a']++;
+    }
+
+    for (int i = 0; i < length_pl; i++)
+    {
+        occurances[player[i] - 'a']--;
+        if (occurances[player[i] - 'a'] < 0)
+        {
+            printf("Player entry \"%s\" disqualified for using letters outside the given letters...\n", player);
+            return 0;
+        }
+    }
+
+    return 1;
 }
